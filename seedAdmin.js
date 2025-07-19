@@ -1,6 +1,6 @@
 // seedAdmin.js
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs'; // ✅ changed from 'bcrypt' to 'bcryptjs'
 import dotenv from 'dotenv';
 import Admin from './models/Admin.js';
 

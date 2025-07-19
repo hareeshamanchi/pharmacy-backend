@@ -1,22 +1,29 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-require('dotenv').config();
-const User = require('./models/User');
+// seedUser.js
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import User from './models/User.js';
+
+dotenv.config();
 
 async function seedUser() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    const hashedPassword = await bcrypt.hash('123456', 10);
+    const email = 'test@example.com';
+    const plainPassword = '123456';
+    const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
+    await User.deleteMany({ email }); // Optional: clear existing test user
+
     const user = new User({
       name: 'Test User',
-      email: 'test@example.com',
+      email,
       password: hashedPassword
     });
 
-    await User.deleteMany({ email: 'test@example.com' }); // optional
     await user.save();
-    console.log('✅ Test user created successfully!');
+    console.log(`✅ Test user "${email}" created successfully!`);
     process.exit();
   } catch (err) {
     console.error('❌ Error creating test user:', err);
