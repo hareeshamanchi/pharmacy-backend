@@ -1,6 +1,5 @@
 import Cart from '../models/cartModel.js';
 
-// Add product to cart
 export const addToCart = async (req, res) => {
   const { userId, productId, name, price, discountPercent } = req.body;
 
@@ -11,7 +10,7 @@ export const addToCart = async (req, res) => {
       cart = new Cart({ userId, items: [] });
     }
 
-    let cartItem = cart.items.find(item => item.productId.toString() === productId);
+    let cartItem = cart.items.find(item => item.productId === productId);
 
     if (cartItem) {
       cartItem.quantity += 1;
@@ -32,17 +31,15 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// Get all cart items
 export const getCartItems = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.user.id }).populate('items.productId');
+    const cart = await Cart.findOne({ userId: req.user.id });
     res.json(cart ? cart.items : []);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch cart items' });
   }
 };
 
-// Remove from cart
 export const removeFromCart = async (req, res) => {
   const { productId } = req.params;
   try {

@@ -8,6 +8,10 @@ const cartItemSchema = new mongoose.Schema({
   discountPercent: { type: Number, required: true, default: 0 }
 });
 
-const CartItem = mongoose.model('CartItem', cartItemSchema);
+const cartSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  items: [cartItemSchema],
+});
 
-export default CartItem;
+const Cart = mongoose.model('Cart', cartSchema);
+export default Cart;

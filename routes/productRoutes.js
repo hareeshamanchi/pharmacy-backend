@@ -2,14 +2,30 @@ import express from 'express';
 import {
   getAllProducts,
   getProductByProductId,
+  getProductsGroupedByCategory,
+  getProductsByCategoryName,
+  searchExactMatchProduct,
+  deleteProductById // ✅ added
 } from '../controllers/productController.js';
 
 const router = express.Router();
 
-// GET all products
+// Search by drug or brand name
+router.get('/search', searchExactMatchProduct);
+
+// Products by category name
+router.get('/category/:category', getProductsByCategoryName);
+
+// Products grouped by category
+router.get('/by-category', getProductsGroupedByCategory);
+
+// Get all products (with optional query param for search)
 router.get('/', getAllProducts);
 
-// GET a product by productId
+// Get specific product by productId
 router.get('/:productId', getProductByProductId);
+
+// ✅ Permanently delete product by _id
+router.delete('/:id', deleteProductById);
 
 export default router;
