@@ -1,10 +1,9 @@
 // routes/emailRoutes.js
-const express = require("express");
-const router = express.Router();
-const { sendInvoice } = require("../controllers/emailController"); // ✅ Import the controller function
+import express from 'express'; // Use ES Module import for express
+import { sendInvoice } from '../controllers/emailController.js'; // ✅ Use ES Module import for controller and add .js extension
 
-// Define the POST route for sending an invoice
-// When a POST request comes to /api/send-invoice, it will execute sendInvoice function
+const router = express.Router();
+
 router.post("/send-invoice", sendInvoice);
 
-module.exports = router; // Export the router
+export default router; // ✅ Export using 'export default'
