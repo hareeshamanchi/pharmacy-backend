@@ -2,11 +2,10 @@
 import express from 'express';
 import multer from 'multer';
 import nodemailer from 'nodemailer';
-import fs from 'fs';
-import path from 'path';
 
 const router = express.Router();
 
+// Set up multer memory storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -15,23 +14,26 @@ router.post('/send-email', upload.single('pdf'), async (req, res) => {
     const { customerEmail } = req.body;
     const file = req.file;
 
+    // 🛑 Check if PDF file is included
     if (!file) {
-      return res.status(400).json({ success: false, message: 'PDF file not found in request' });
+      return res.status(400).json({ success: false, message: 'PDF file is missing' });
     }
 
+    // ✅ Use environment variables set in Render dashboard
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'focusgovernment@gmail.com',
-        pass: process.env.GMAIL_APP_PASSWORD, // Use environment variable
+        user: process.env.EMAIL_USER, // 'focusgovernment@gmail.com'
+        pass: process.env.EMAIL_PASS, // App password from Render env
       },
     });
 
+    // ✅ Prepare mail
     const mailOptions = {
-      from: 'focusgovernment@gmail.com',
-      to: [customerEmail, 'focusgovernment@gmail.com'], // Send to both
-      subject: '🧾 Your Medicine Order Invoice',
-      text: 'Attached is the invoice for your recent pharmacy order.',
+      from: process.env.EMAIL_USER,
+      to: [customerEmail, process.env.EMAIL_USER], // Send to both buyer & seller
+      subject: '🧾 Pharmacy Invoice for Your Order',
+      text: 'Please find the attached invoice for your medicine order.',
       attachments: [
         {
           filename: file.originalname || 'invoice.pdf',
@@ -41,14 +43,15 @@ router.post('/send-email', upload.single('pdf'), async (req, res) => {
       ],
     };
 
+    // ✅ Send email
     const info = await transporter.sendMail(mailOptions);
-
     console.log('✅ Email sent:', info.response);
+
     res.status(200).json({ success: true, message: 'Email sent successfully' });
 
   } catch (error) {
     console.error('❌ Email send error:', error);
-    res.status(500).json({ success: false, message: 'Failed to send email' });
+    res.status(500).json({ success: false, message: 'Email failed to send' });
   }
 });
 
