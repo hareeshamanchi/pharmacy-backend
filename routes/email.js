@@ -1,6 +1,9 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import multer from 'multer';
+import dotenv from 'dotenv';
+
+dotenv.config(); // ✅ load .env from Render
 
 const router = express.Router();
 const upload = multer();
@@ -18,14 +21,14 @@ router.post('/send-invoice', upload.single('file'), async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'focusgovernment@gmail.com',
-        pass: 'fzmb jjrd qxud pqrk' // App Password
+        user: process.env.EMAIL_USER,     // ✅ from Render
+        pass: process.env.EMAIL_PASS      // ✅ from Render
       }
     });
 
     const mailOptions = {
-      from: 'focusgovernment@gmail.com',
-      to: [`focusgovernment@gmail.com`, customerEmail], // ✅ BOTH seller and customer
+      from: process.env.EMAIL_USER,
+      to: [process.env.EMAIL_USER, customerEmail], // ✅ BOTH seller and customer
       subject: `VaidyaSthana Invoice - ${invoiceId}`,
       text: 'Please find your invoice attached.',
       attachments: [
@@ -37,7 +40,7 @@ router.post('/send-invoice', upload.single('file'), async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (err) {
     console.error('❌ Email send error:', err);
     res.status(500).json({ error: 'Failed to send email' });
