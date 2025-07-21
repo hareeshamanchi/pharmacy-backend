@@ -1,4 +1,6 @@
 import Product from '../models/productModel.js';
+import fs from 'fs';
+import path from 'path';
 
 // ✅ Get all products (with optional query param)
 export const getAllProducts = async (req, res) => {
@@ -92,19 +94,26 @@ export const deleteProductById = async (req, res) => {
   }
 };
 
-// ✅ Update product by productId (with image support)
-export const updateProductByProductId = async (req, res) => {
+// ✅ Update product by MongoDB _id (with image support)
+export const updateProductById = async (req, res) => {
   try {
-    const { productId } = req.params;
+    const { id } = req.params;
     const updatedFields = req.body;
 
-    // If image is uploaded
+    // ✅ Handle uploaded image if present
     if (req.file) {
-      updatedFields.image = req.file.originalname; // or save buffer with fs
+      // Option 1: Save base64 string to DB (recommended if no static server)
+      const base64Image = req.file.buffer.toString('base64');
+      updatedFields.image = `data:${req.file.mimetype};base64,${base64Image}`;
+
+      // Option 2: Save to local folder
+      // const filePath = path.join('uploads', `${Date.now()}-${req.file.originalname}`);
+      // fs.writeFileSync(filePath, req.file.buffer);
+      // updatedFields.image = filePath;
     }
 
-    const updatedProduct = await Product.findOneAndUpdate(
-      { productId },
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
       { $set: updatedFields },
       { new: true }
     );
