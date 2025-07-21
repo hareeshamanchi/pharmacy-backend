@@ -1,49 +1,54 @@
+// routes/email.js
 import express from 'express';
-import nodemailer from 'nodemailer';
 import multer from 'multer';
-import dotenv from 'dotenv';
-
-dotenv.config(); // ✅ load .env from Render
+import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 const router = express.Router();
-const upload = multer();
 
-// ✅ POST route to send invoice to both seller and customer
-router.post('/send-invoice', upload.single('file'), async (req, res) => {
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+router.post('/send-email', upload.single('pdf'), async (req, res) => {
   try {
-    const { invoiceId, customerEmail } = req.body;
+    const { customerEmail } = req.body;
     const file = req.file;
 
-    if (!customerEmail) {
-      return res.status(400).json({ error: 'Customer email is required' });
+    if (!file) {
+      return res.status(400).json({ success: false, message: 'PDF file not found in request' });
     }
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,     // ✅ from Render
-        pass: process.env.EMAIL_PASS      // ✅ from Render
-      }
+        user: 'focusgovernment@gmail.com',
+        pass: process.env.GMAIL_APP_PASSWORD, // Use environment variable
+      },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: [process.env.EMAIL_USER, customerEmail], // ✅ BOTH seller and customer
-      subject: `VaidyaSthana Invoice - ${invoiceId}`,
-      text: 'Please find your invoice attached.',
+      from: 'focusgovernment@gmail.com',
+      to: [customerEmail, 'focusgovernment@gmail.com'], // Send to both
+      subject: '🧾 Your Medicine Order Invoice',
+      text: 'Attached is the invoice for your recent pharmacy order.',
       attachments: [
         {
-          filename: file.originalname,
-          content: file.buffer
-        }
-      ]
+          filename: file.originalname || 'invoice.pdf',
+          content: file.buffer,
+          contentType: 'application/pdf',
+        },
+      ],
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log('✅ Email sent:', info.response);
     res.status(200).json({ success: true, message: 'Email sent successfully' });
-  } catch (err) {
-    console.error('❌ Email send error:', err);
-    res.status(500).json({ error: 'Failed to send email' });
+
+  } catch (error) {
+    console.error('❌ Email send error:', error);
+    res.status(500).json({ success: false, message: 'Failed to send email' });
   }
 });
 
