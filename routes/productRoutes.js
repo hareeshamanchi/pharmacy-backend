@@ -7,34 +7,34 @@ import {
   getProductsByCategoryName,
   searchExactMatchProduct,
   deleteProductById,
-  updateProductById // ✅ newly added
+  updateProductById
 } from '../controllers/productController.js';
 
 const router = express.Router();
 
-// Multer for file upload (memory storage)
+// ✅ Multer setup using memoryStorage (RAM)
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Search by drug or brand name
+// 🔍 Search by drug or brand name
 router.get('/search', searchExactMatchProduct);
 
-// Products by category name
+// 📦 Products by category
 router.get('/category/:category', getProductsByCategoryName);
 
-// Products grouped by category
+// 📦 Products grouped by category
 router.get('/by-category', getProductsGroupedByCategory);
 
-// Get all products (with optional query param for search)
+// 📦 All products or search by query
 router.get('/', getAllProducts);
 
-// Get specific product by productId
+// 📦 Get product by productId
 router.get('/:productId', getProductByProductId);
 
-// ✅ Update product with optional image upload
+// 📝 Update product by MongoDB _id with optional image upload
 router.put('/:id', upload.single('image'), updateProductById);
 
-// ✅ Permanently delete product by _id
+// ❌ Delete product by MongoDB _id
 router.delete('/:id', deleteProductById);
 
 export default router;

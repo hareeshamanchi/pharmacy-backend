@@ -106,3 +106,30 @@ export const deleteProductById = async (req, res) => {
     res.status(500).json({ message: 'Error deleting product: ' + error.message });
   }
 };
+
+// ✅ Update product by _id
+export const updateProductById = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const updatedFields = req.body;
+
+    if (req.file) {
+      // If a new image is uploaded
+      updatedFields.image = req.file.filename; // multer saves filename
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Product not found for update' });
+    }
+
+    res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating product: ' + error.message });
+  }
+};
