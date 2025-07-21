@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 // Import all your routes
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import authRoutes from './routes/authRoutes.js';
+
 import emailRoutes from './routes/email.js';
 import adminRoutes from './routes/adminRoutes.js';
 import adminLoginRoutes from './routes/adminLoginRoutes.js';
@@ -37,7 +37,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/auth', authRoutes);
+
 app.use('/api', emailRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/login', adminLoginRoutes);
