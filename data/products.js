@@ -7,7 +7,7 @@ const products = [
     price: 10,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/OIP.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/filename.jpeg',
     category: 'Pain Relief',
     description: `**Overview:**  
 Aspirin is a salicylate drug used for pain relief, fever, and inflammation.
@@ -24,8 +24,9 @@ Aspirin is a salicylate drug used for pain relief, fever, and inflammation.
     composition: 'Amoxicillin (C16H19N3O5S)',
     price: 35,
     discount: 5,
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/e.jpeg',
+
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/e.jpeg',
     category: 'Antibiotics',
     description: `**Overview:**  
 Broad-spectrum antibiotic effective against various infections.
@@ -42,7 +43,7 @@ Broad-spectrum antibiotic effective against various infections.
     price: 25,
     discount: 20,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/t.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/t.jpeg',
     category: 'Pain Relief',
     description: `**Overview:**  
 NSAID used for pain, fever, and inflammation relief.
@@ -59,7 +60,7 @@ NSAID used for pain, fever, and inflammation relief.
     price: 15,
     discount: 10,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/par.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/par.jpeg',
     category: 'Pain Relief',
     description: `**Overview:**  
 Commonly used antipyretic and analgesic.
@@ -77,7 +78,7 @@ Commonly used antipyretic and analgesic.
     price: 45,
     discount: 8,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/e.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/e.jpeg',
     category: 'Antibiotics',
     description: `**Overview:**  
 Broad-spectrum antibiotic effective for serious bacterial infections.
@@ -93,7 +94,7 @@ Broad-spectrum antibiotic effective for serious bacterial infections.
     price: 20,
     discount: 10,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/OIP.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/OIP.jpeg',
     category: 'Diabetes',
     description: `**Overview:**  
 Used to control high blood sugar in type 2 diabetes.
@@ -110,7 +111,7 @@ Used to control high blood sugar in type 2 diabetes.
     price: 30,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/t.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/t.jpeg',
     category: 'Blood Pressure',
     description: `**Overview:**  
 Angiotensin receptor blocker for hypertension.
@@ -127,7 +128,7 @@ Angiotensin receptor blocker for hypertension.
     price: 18,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/par.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/par.jpeg',
     category: 'Gastric',
     description: `**Overview:**  
 Proton pump inhibitor for gastric problems.
@@ -145,7 +146,7 @@ Proton pump inhibitor for gastric problems.
     price: 12,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/OIP.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/OIP.jpeg',
     category: 'Allergy',
     description: `**Overview:**  
 Antihistamine used for allergy relief.
@@ -162,7 +163,7 @@ Antihistamine used for allergy relief.
     price: 25,
     discount: 10,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/e.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/e.jpeg',
     category: 'Supplements',
     description: `**Overview:**  
 Immune support supplement.
@@ -179,7 +180,7 @@ Immune support supplement.
     price: 40,
     discount: 10,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/par.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/par.jpeg',
     category: 'Supplements',
     description: `**Overview:**  
 Calcium and D3 for bone strength.
@@ -196,7 +197,7 @@ Calcium and D3 for bone strength.
     price: 60,
     discount: 15,
     tabletsPerSheet: 6,
-    imageUrl: 'http://localhost:5000/images/t.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/t.jpeg',
     category: 'Antibiotics',
     description: `**Overview:**  
 Macrolide antibiotic for infections.
@@ -213,7 +214,7 @@ Macrolide antibiotic for infections.
     price: 20,
     discount: 10,
     tabletsPerSheet: 15,
-    imageUrl: 'http://localhost:5000/images/par.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/par.jpeg',
     category: 'Pain Relief',
     description: `**Overview:**  
 Effective pain and fever relief tablet.
@@ -230,7 +231,7 @@ Effective pain and fever relief tablet.
     price: 28,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/OIP.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/OIP.jpeg',
     category: 'Gastric',
     description: `**Overview:**  
 Used for acid reflux and ulcers.
@@ -247,7 +248,7 @@ Used for acid reflux and ulcers.
     price: 14,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/e.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/e.jpeg',
     category: 'Allergy',
     description: `**Overview:**  
 Anti-allergy medicine.
@@ -264,7 +265,7 @@ Anti-allergy medicine.
     price: 16,
     discount: 5,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/t.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/t.jpeg',
     category: 'Gastric',
     description: `**Overview:**  
 Used for nausea and vomiting relief.
@@ -281,7 +282,7 @@ Used for nausea and vomiting relief.
     price: 32,
     discount: 8,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/par.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/par.jpeg',
     category: 'Respiratory',
     description: `**Overview:**  
 Leukotriene receptor antagonist.
@@ -298,7 +299,7 @@ Leukotriene receptor antagonist.
     price: 34,
     discount: 7,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/OIP.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/OIP.jpeg',
     category: 'Blood Pressure',
     description: `**Overview:**  
 Used to treat hypertension.
@@ -315,7 +316,7 @@ Used to treat hypertension.
     price: 29,
     discount: 10,
     tabletsPerSheet: 10,
-    imageUrl: 'http://localhost:5000/images/e.jpeg',
+    imageUrl: 'https://pharmacy-backend-yyf3.onrender.com/images/e.jpeg',
     category: 'Cholesterol',
     description: `**Overview:**  
 Lowers bad cholesterol and triglycerides.
