@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url'; // ✅ Corrected import: 'fileURLToPath'
 // Import all your route files
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import emailRoutes from './routes/emailRoutes.js';
+import emailRoutes from './routes/emailRoutes.js'; // Ensure this is the correct emailRoutes.js
 import adminRoutes from './routes/adminRoutes.js';
 import adminLoginRoutes from './routes/adminLoginRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
@@ -19,7 +19,7 @@ dotenv.config();
 const app = express();
 
 // Middleware: Parse JSON request bodies
-app.use(express.json());
+app.use(express.json()); // This handles JSON bodies, but not multipart/form-data directly
 
 // Middleware: Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors({
@@ -31,7 +31,6 @@ app.use(cors({
 }));
 
 // Serve static files from the 'images' directory
-// ✅ Corrected typo here: fileURLToPath instead of fileURLToTypeOf
 const __filename = fileURLToPath(import.meta.url); // Gets the current file's path
 const __dirname = path.dirname(__filename); // Gets the current directory's path
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -39,7 +38,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // API Routes setup
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api', emailRoutes); // Ensure this is the correct emailRoutes.js
+app.use('/api', emailRoutes); // ✅ This will use the multer-enabled emailRoutes.js
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/login', adminLoginRoutes);
 app.use('/api/contact', contactRoutes);

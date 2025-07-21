@@ -1,9 +1,19 @@
 // routes/emailRoutes.js
-import express from 'express'; // Use ES Module import for express
-import { sendInvoice } from '../controllers/emailController.js'; // ✅ Use ES Module import for controller and add .js extension
+import express from 'express';
+import multer from 'multer'; // ✅ Import multer
+import { sendInvoice } from '../controllers/emailController.js'; // ✅ Use ES Module import for named export
 
 const router = express.Router();
 
-router.post("/send-invoice", sendInvoice);
+// Configure multer to store the uploaded file in memory.
+// This is suitable for small files like PDFs.
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-export default router; // ✅ Export using 'export default'
+// Define the POST route for sending an invoice.
+// 'upload.single('file')' means it expects a single file upload
+// with the field name 'file' (which matches your frontend's form.append('file', ...)).
+router.post("/send-invoice", upload.single('file'), sendInvoice); // ✅ Add multer middleware
+
+// ✅ Export the router as the default export for server.js to import
+export default router;
