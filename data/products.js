@@ -309,6 +309,7 @@ Used to treat hypertension.
 - Heart protection`
   },
   {
+    
     productId: 'P019',
     drugName: 'Atorvastatin 10mg',
     brandName: 'Lipitor',
