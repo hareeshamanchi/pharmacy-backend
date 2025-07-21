@@ -1,125 +1,110 @@
 import Product from '../models/productModel.js';
 
-// Get all products (with optional search by drugName or brandName)
+// ✅ Get all products (with optional query param)
 export const getAllProducts = async (req, res) => {
   try {
-    const { search } = req.query;
-
-    let query = {};
-    if (search) {
-      query = {
-        $or: [
-          { drugName: { $regex: search, $options: 'i' } },
-          { brandName: { $regex: search, $options: 'i' } }
-        ]
-      };
-    }
-
-    const products = await Product.find(query);
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error: ' + error.message });
+    const products = await Product.find({});
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch products', error: err.message });
   }
 };
 
-// Get product by productId
+// ✅ Get product by productId (like "P007")
 export const getProductByProductId = async (req, res) => {
   try {
-    const product = await Product.findOne({ productId: req.params.productId });
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).json({ message: 'Product not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Server error: ' + error.message });
-  }
-};
+    const { productId } = req.params;
+    const product = await Product.findOne({ productId });
 
-// Group products by category
-export const getProductsGroupedByCategory = async (req, res) => {
-  try {
-    const products = await Product.find({});
-    const grouped = products.reduce((acc, product) => {
-      if (!acc[product.category]) acc[product.category] = [];
-      acc[product.category].push(product);
-      return acc;
-    }, {});
-    res.json(grouped);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to group products by category: ' + error.message });
-  }
-};
-
-// Get products by category name
-export const getProductsByCategoryName = async (req, res) => {
-  try {
-    const { category } = req.params;
-    const products = await Product.find({
-      category: { $regex: new RegExp(category, 'i') }
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: 'No products found in this category' });
-    }
-
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching category products: ' + error.message });
-  }
-};
-
-// Search product by drugName or brandName — for autosuggestions or redirect
-export const searchExactMatchProduct = async (req, res) => {
-  try {
-    const query = req.query.q;
-    if (!query) return res.status(400).json({ error: 'Search query missing' });
-
-    const regex = new RegExp(query, 'i');
-    const results = await Product.find({
-      $or: [
-        { drugName: { $regex: regex } },
-        { brandName: { $regex: regex } }
-      ]
-    });
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'No products found' });
-    }
-
-    res.json(results);
-  } catch (err) {
-    console.error('Search error:', err);
-    res.status(500).json({ error: 'Server error while searching' });
-  }
-};
-
-// ✅ Permanently delete product by _id
-export const deleteProductById = async (req, res) => {
-  try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-    if (!deletedProduct) {
+    if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting product: ' + error.message });
+
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch product', error: err.message });
   }
 };
 
-// ✅ Update product by _id
-export const updateProductById = async (req, res) => {
+// ✅ Group products by category
+export const getProductsGroupedByCategory = async (req, res) => {
   try {
-    const productId = req.params.id;
-    const updatedFields = req.body;
+    const categories = await Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          products: { $push: '$$ROOT' },
+        },
+      },
+    ]);
+    res.status(200).json(categories);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to group products', error: err.message });
+  }
+};
 
-    if (req.file) {
-      // If a new image is uploaded
-      updatedFields.image = req.file.filename; // multer saves filename
+// ✅ Get products by category name
+export const getProductsByCategoryName = async (req, res) => {
+  try {
+    const category = req.params.category;
+    const products = await Product.find({ category });
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch category products', error: err.message });
+  }
+};
+
+// ✅ Search product by exact match (drugName or brandName)
+export const searchExactMatchProduct = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    const product = await Product.findOne({
+      $or: [
+        { drugName: { $regex: `^${query}$`, $options: 'i' } },
+        { brandName: { $regex: `^${query}$`, $options: 'i' } },
+      ],
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: 'No matching product found' });
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to search product', error: err.message });
+  }
+};
+
+// ✅ Delete product by MongoDB _id
+export const deleteProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Product.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Product not found to delete' });
+    }
+
+    res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete product', error: err.message });
+  }
+};
+
+// ✅ Update product by productId (with image support)
+export const updateProductByProductId = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const updatedFields = req.body;
+
+    // If image is uploaded
+    if (req.file) {
+      updatedFields.image = req.file.originalname; // or save buffer with fs
+    }
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { productId },
       { $set: updatedFields },
       { new: true }
     );
